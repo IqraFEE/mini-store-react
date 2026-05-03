@@ -1,6 +1,11 @@
-function Cart({ cart, removeFromCart }) {
+function Cart({
+  cart,
+  increaseQty,
+  decreaseQty
+}) {
   const total = cart.reduce(
-    (sum, item) => sum + item.price,
+    (sum, item) =>
+      sum + item.price * item.qty,
     0
   );
 
@@ -17,14 +22,32 @@ function Cart({ cart, removeFromCart }) {
             <div className="card" key={index}>
               <h3>{item.name}</h3>
 
-              <p>${item.price}</p>
+              <p>
+                ${item.price} x {item.qty}
+              </p>
 
               <button
                 onClick={() =>
-                  removeFromCart(index)
+                  decreaseQty(item.name)
                 }
               >
-                Remove
+                -
+              </button>
+
+              <span
+                style={{
+                  margin: "0 10px"
+                }}
+              >
+                {item.qty}
+              </span>
+
+              <button
+                onClick={() =>
+                  increaseQty(item.name)
+                }
+              >
+                +
               </button>
             </div>
           ))}
