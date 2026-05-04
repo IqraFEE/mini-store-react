@@ -16,6 +16,7 @@ body {
 .navbar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 20px 40px;
   background: #111827;
 }
@@ -43,6 +44,7 @@ body {
   background: #1f2937;
   padding: 20px;
   border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card h3 {
@@ -53,6 +55,11 @@ body {
   margin-bottom: 15px;
 }
 
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
 /* Button */
 button {
   border: none;
@@ -61,8 +68,10 @@ button {
   background: #3b82f6;
   color: white;
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
 button:hover {
-  background: #2563eb;
+ background: #2563eb;
+  transform: scale(1.03);
 }

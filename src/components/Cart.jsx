@@ -24,7 +24,10 @@ function Cart() {
 
       {/* EMPTY CART STATE */}
       {cart.length === 0 ? (
-        <p>Cart is empty</p>
+        <div style={{ textAlign: "center", padding: "40px" }}>
+  <h3>Your cart is empty 🛒</h3>
+  <p>Add some products to get started</p>
+</div>
       ) : (
         <div>
           {/* CART ITEMS */}
