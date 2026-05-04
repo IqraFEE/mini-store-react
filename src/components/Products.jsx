@@ -1,14 +1,26 @@
 import { useState } from "react";
+import { useCart } from "../context/CartContext";
 
-function Products({ addToCart }) {
-  // Search text
+/*
+  🧠 PRODUCTS COMPONENT (CONTEXT VERSION)
+
+  Changes from before:
+  - Removed props (no more addToCart prop)
+  - Using global CartContext instead
+  - Cleaner + scalable architecture
+*/
+
+function Products() {
+  // Get addToCart from global context
+  const { addToCart } = useCart();
+
+  // Search state
   const [search, setSearch] = useState("");
 
-  // Category selected
-  const [category, setCategory] =
-    useState("All");
+  // Category state
+  const [category, setCategory] = useState("All");
 
-  // Products data
+  // Products data (static for now)
   const products = [
     {
       name: "Wireless Headphones",
@@ -32,38 +44,29 @@ function Products({ addToCart }) {
     }
   ];
 
-  // Filtered products
-  const filteredProducts =
-    products.filter((product) => {
-      const matchSearch =
-        product.name
-          .toLowerCase()
-          .includes(
-            search.toLowerCase()
-          );
+  // Filter logic (search + category)
+  const filteredProducts = products.filter((product) => {
+    const matchSearch = product.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
-      const matchCategory =
-        category === "All" ||
-        product.category === category;
+    const matchCategory =
+      category === "All" ||
+      product.category === category;
 
-      return (
-        matchSearch &&
-        matchCategory
-      );
-    });
+    return matchSearch && matchCategory;
+  });
 
   return (
     <section className="products">
       <h1>Products</h1>
 
-      {/* Search */}
+      {/* SEARCH INPUT */}
       <input
         type="text"
         placeholder="Search product..."
         value={search}
-        onChange={(e) =>
-          setSearch(e.target.value)
-        }
+        onChange={(e) => setSearch(e.target.value)}
         style={{
           padding: "10px",
           width: "100%",
@@ -71,12 +74,10 @@ function Products({ addToCart }) {
         }}
       />
 
-      {/* Dropdown */}
+      {/* CATEGORY FILTER */}
       <select
         value={category}
-        onChange={(e) =>
-          setCategory(e.target.value)
-        }
+        onChange={(e) => setCategory(e.target.value)}
         style={{
           padding: "10px",
           width: "100%",
@@ -88,37 +89,32 @@ function Products({ addToCart }) {
         <option>Accessories</option>
       </select>
 
-      {/* Products */}
+      {/* PRODUCTS GRID */}
       <div className="grid">
+        {filteredProducts.map((product, index) => (
+          <div className="card" key={index}>
+            <h3>{product.name}</h3>
+            <p>${product.price}</p>
+            <p>{product.category}</p>
 
-        {filteredProducts.map(
-          (product, index) => (
-            <div
-              className="card"
-              key={index}
-            >
-              <h3>{product.name}</h3>
-
-              <p>${product.price}</p>
-
-              <p>
-                {product.category}
-              </p>
-
-              <button
-                onClick={() =>
-                  addToCart(product)
-                }
-              >
-                Add to Cart
-              </button>
-            </div>
-          )
-        )}
-
+            {/* ADD TO CART (NOW FROM CONTEXT) */}
+            <button onClick={() => addToCart(product)}>
+              Add to Cart
+            </button>
+          </div>
+        ))}
       </div>
     </section>
   );
 }
 
 export default Products;
+
+/*
+  📌 NOTES (READ THIS LATER)
+
+  1. No props needed anymore (clean architecture)
+  2. addToCart comes from CartContext
+  3. Component is now reusable anywhere
+  4. This is "context-driven state management"
+*/
