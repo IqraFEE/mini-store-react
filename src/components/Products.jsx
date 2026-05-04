@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 /*
-  🧠 PRODUCTS COMPONENT (CONTEXT VERSION)
+  🧠 PRODUCTS PAGE (ROUTER + CONTEXT VERSION)
 
-  Changes from before:
-  - Removed props (no more addToCart prop)
-  - Using global CartContext instead
-  - Cleaner + scalable architecture
+  What changed:
+  ✔ Uses CartContext (no props)
+  ✔ Adds React Router navigation
+  ✔ Click product → opens detail page
 */
 
 function Products() {
-  // Get addToCart from global context
   const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   // Search state
   const [search, setSearch] = useState("");
@@ -20,7 +21,7 @@ function Products() {
   // Category state
   const [category, setCategory] = useState("All");
 
-  // Products data (static for now)
+  // Product data (static for now)
   const products = [
     {
       name: "Wireless Headphones",
@@ -44,7 +45,7 @@ function Products() {
     }
   ];
 
-  // Filter logic (search + category)
+  // Filter logic
   const filteredProducts = products.filter((product) => {
     const matchSearch = product.name
       .toLowerCase()
@@ -61,7 +62,7 @@ function Products() {
     <section className="products">
       <h1>Products</h1>
 
-      {/* SEARCH INPUT */}
+      {/* SEARCH */}
       <input
         type="text"
         placeholder="Search product..."
@@ -92,13 +93,28 @@ function Products() {
       {/* PRODUCTS GRID */}
       <div className="grid">
         {filteredProducts.map((product, index) => (
-          <div className="card" key={index}>
+          <div
+            className="card"
+            key={index}
+            style={{ cursor: "pointer" }}
+
+            /* 🧠 CLICK → GO TO PRODUCT PAGE */
+            onClick={() =>
+              navigate(`/product/${index}`)
+            }
+          >
             <h3>{product.name}</h3>
             <p>${product.price}</p>
             <p>{product.category}</p>
 
-            {/* ADD TO CART (NOW FROM CONTEXT) */}
-            <button onClick={() => addToCart(product)}>
+            {/* ADD TO CART BUTTON */}
+            <button
+              onClick={(e) => {
+                // stop card click navigation
+                e.stopPropagation();
+                addToCart(product);
+              }}
+            >
               Add to Cart
             </button>
           </div>
@@ -113,8 +129,9 @@ export default Products;
 /*
   📌 NOTES (READ THIS LATER)
 
-  1. No props needed anymore (clean architecture)
-  2. addToCart comes from CartContext
-  3. Component is now reusable anywhere
-  4. This is "context-driven state management"
+  1. Product cards are now clickable
+  2. Clicking opens /product/:id route
+  3. Button uses stopPropagation to avoid navigation
+  4. Cart logic comes from global context
+  5. This is standard ecommerce UI pattern
 */

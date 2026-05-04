@@ -1,55 +1,34 @@
 import Navbar from "./components/Navbar";
 import Products from "./components/Products";
 import Cart from "./components/Cart";
+import ProductDetails from "./pages/ProductDetails";
+
+import { Routes, Route } from "react-router-dom";
 
 /*
-  🧠 APP COMPONENT (NOW CLEAN)
+  🧠 APP NOW CONTROLS PAGES
 
-  Before:
-  - App was managing cart state + logic
-
-  Now:
-  - Cart logic moved to CartContext (global state)
-  - App only handles layout and rendering components
-
-  This makes App:
-  ✔ simpler
-  ✔ cleaner
-  ✔ scalable
+  Instead of showing everything at once,
+  we show different components based on URL
 */
 
 function App() {
   return (
     <div>
       <Navbar />
-      <Products />
-      <Cart />
+
+      <Routes>
+        {/* Home page (products list) */}
+        <Route path="/" element={<Products />} />
+
+        {/* Cart page */}
+        <Route path="/cart" element={<Cart />} />
+
+        {/* Product detail page */}
+        <Route path="/product/:id" element={<ProductDetails />} />
+      </Routes>
     </div>
   );
 }
 
 export default App;
-
-/*
-  📌 NOTES (READ THIS LATER)
-
-  1. App is now a "layout shell"
-  2. No more prop drilling
-  3. All cart logic comes from CartContext
-  4. Components will now use:
-        import { useCart } from "../context/CartContext";
-
-  5. This is how real production React apps are structured
-
-
-  -------------
-
-  JSON.parse(savedCart)
-  Turns saved text back into real array.
-  Because browser stores text only.
-
-  ----------
-
-  JSON.stringify(cart)
-  Turns array into text so browser can store it.
-*/
