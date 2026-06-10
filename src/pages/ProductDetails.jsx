@@ -14,11 +14,16 @@ import products from "../data/products";
 function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const {cart, addToCart } = useCart();
 
   // Find product by ID from shared data
   const product = products.find(
     (p) => p.id === parseInt(id)
+  );
+
+  // Checks if product is already in the cart
+  const isInCart = cart.some(
+    (item) => item.id === product.id
   );
 
   // If product not found
@@ -34,39 +39,63 @@ function ProductDetails() {
   }
 
   return (
-    <div style={{ padding: "40px", maxWidth: "600px", margin: "auto" }}>
-      {/* PRODUCT NAME */}
-      <h1>{product.name}</h1>
+  <div className="product-details">
+    
+    {/* Product container */}
+    <div className="product-card">
 
-      {/* CATEGORY */}
-      <p style={{ color: "gray" }}>
-        {product.category}
-      </p>
+      {/* Product image */}
+      <img
+        src={product.image}
+        alt={product.name}
+        className="detail-image"
+      />
 
-      {/* PRICE */}
-      <h2 style={{ margin: "10px 0" }}>
-        ${product.price}
-      </h2>
+      {/* Product info section */}
+      <div className="product-info">
 
-      {/* DESCRIPTION */}
-      <p style={{ marginBottom: "20px" }}>
-        {product.description}
-      </p>
+        {/* Product name */}
+        <h1>{product.name}</h1>
 
-      {/* ADD TO CART BUTTON */}
-      <button
-        onClick={() => addToCart(product)}
-        style={{ marginRight: "10px" }}
-      >
-        Add to Cart
-      </button>
+        {/* Product price */}
+        <h3 style={{ color: "#3b82f6", marginTop: "10px" }}>
+          ${product.price}
+        </h3>
 
-      {/* BACK BUTTON */}
-      <button onClick={() => navigate(-1)}>
-        Go Back
-      </button>
+        {/* Product description */}
+        <p style={{ marginTop: "15px", lineHeight: "1.6" }}>
+          {product.description}
+        </p>
+
+        {/* Add to cart button */}
+        <button
+          onClick={() => addToCart(product)}
+          disabled={isInCart}
+          style={{
+            marginTop: "25px",
+            // checks if the product is already in cart or not then button behaves accordingly
+            background: isInCart ? "#16a34a" : "#3b82f6",
+            cursor: isInCart ? "not-allowed" : "pointer"
+          }}
+        >
+          {isInCart ? "✔ Added" : "Add to Cart"}
+        </button>
+
+        <button
+          onClick={() => navigate("/")}
+          style={{
+            margin: "20px",
+            background: "#6b7280"
+          }}
+        >
+          ← Back to Products
+        </button>
+
+      </div>
+
     </div>
-  );
+  </div>
+);
 }
 
 export default ProductDetails;

@@ -75,3 +75,57 @@ button:hover {
  background: #2563eb;
   transform: scale(1.03);
 }
+
+/* Product images */
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  /* object-fit: cover; means fill the image box while keeping proportions. */
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.product-details {
+  max-width: 900px;
+  margin: auto;
+  padding: 60px 20px;
+}
+
+.product-card {
+  display: flex;
+  gap: 30px;
+  background: #1f2937;
+  padding: 30px;
+  border-radius: 12px;
+  align-items: center;
+}
+
+.detail-image {
+  width: 320px;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.product-info h1 {
+  margin-bottom: 5px;
+}
+
+.product-info p {
+  color: #d1d5db;
+  line-height: 1.5;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #16a34a;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 9999;
+}

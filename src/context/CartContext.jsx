@@ -22,11 +22,15 @@ const CartContext = createContext();
 
 // 2. Provider wraps entire app
 export function CartProvider({ children }) {
+
   // Load cart from localStorage
   const [cart, setCart] = useState(() => {
     const saved = localStorage.getItem("cart");
     return saved ? JSON.parse(saved) : [];
   });
+
+  // toast = little message box
+const [toast, setToast] = useState("");
 
   /*
     ➕ ADD TO CART
@@ -34,51 +38,60 @@ export function CartProvider({ children }) {
     If not → add new item
   */
   const addToCart = (product) => {
-    const existing = cart.find(
+  setCart((prevCart) => {
+    const existing = prevCart.find(
       (item) => item.name === product.name
     );
 
     if (existing) {
-      setCart(
-        cart.map((item) =>
-          item.name === product.name
-            ? { ...item, qty: item.qty + 1 }
-            : item
-        )
+      return prevCart.map((item) =>
+        item.name === product.name
+          ? { ...item, qty: item.qty + 1 }
+          : item
       );
-    } else {
-      setCart([...cart, { ...product, qty: 1 }]);
     }
-  };
 
+    return [...prevCart, { ...product, qty: 1 }];
+  });
+
+  showToast("✔ Added to cart");
+};
+
+const showToast = (message) => {
+  setToast(message);
+
+  setTimeout(() => {
+    setToast("");
+  }, 1500);
+};
   /*
     ➕ INCREASE QUANTITY
   */
   const increaseQty = (name) => {
-    setCart(
-      cart.map((item) =>
-        item.name === name
-          ? { ...item, qty: item.qty + 1 }
-          : item
-      )
-    );
-  };
+  setCart((prevCart) =>
+    prevCart.map((item) =>
+      item.name === name
+        ? { ...item, qty: item.qty + 1 }
+        : item
+    )
+  );
+};
 
   /*
     ➖ DECREASE QUANTITY
     If qty becomes 0 → remove item
   */
   const decreaseQty = (name) => {
-    setCart(
-      cart
-        .map((item) =>
-          item.name === name
-            ? { ...item, qty: item.qty - 1 }
-            : item
-        )
-        .filter((item) => item.qty > 0)
-    );
-  };
+  setCart((prevCart) =>
+    prevCart
+      .map((item) =>
+        item.name === name
+          ? { ...item, qty: item.qty - 1 }
+          : item
+      )
+      .filter((item) => item.qty > 0)
+  );
+};
 
   /*
     💾 SAVE CART TO LOCAL STORAGE
@@ -110,7 +123,8 @@ export function CartProvider({ children }) {
         addToCart,
         increaseQty,
         decreaseQty,
-        total
+        total,
+        toast
       }}
     >
       {children}

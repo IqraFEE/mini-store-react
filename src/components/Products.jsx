@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import products from "../data/products";
 
 /*
   🧠 PRODUCTS PAGE (ROUTER + CONTEXT VERSION)
@@ -21,29 +22,7 @@ function Products() {
   // Category state
   const [category, setCategory] = useState("All");
 
-  // Product data (static for now)
-  const products = [
-    {
-      name: "Wireless Headphones",
-      price: 99,
-      category: "Electronics"
-    },
-    {
-      name: "Smart Watch",
-      price: 149,
-      category: "Electronics"
-    },
-    {
-      name: "Gaming Mouse",
-      price: 59,
-      category: "Accessories"
-    },
-    {
-      name: "Laptop Stand",
-      price: 39,
-      category: "Accessories"
-    }
-  ];
+ 
 
   // Filter logic
   const filteredProducts = products.filter((product) => {
@@ -103,9 +82,15 @@ function Products() {
               navigate(`/product/${index}`)
             }
           >
+            <img
+              src={product.image}
+              alt={product.name}
+              className="product-image"
+            />
             <h3>{product.name}</h3>
             <p>${product.price}</p>
             <p>{product.category}</p>
+            <p>{product.description}</p>
 
             {/* ADD TO CART BUTTON */}
             <button

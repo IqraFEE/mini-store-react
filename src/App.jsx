@@ -19,7 +19,12 @@ function App() {
 
       <Routes>
         {/* Home page (products list) */}
-        <Route path="/" element={<Products />} />
+        <Route path="/" element={
+            <>
+              <Products />
+              <Cart />
+            </>
+          } />
 
         {/* Cart page */}
         <Route path="/cart" element={<Cart />} />
